@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+
+import React, { useState } from 'react';
 import './App.css';
+import ToDoForm from './components/TodoForm';
+import ToDoItem from './components/ToDoItem';
 
 function App() {
+  const [toDoItems, setToDoItems] = useState([])
+
+  function addItem(toDoItem){
+    setToDoItems(prevToDoItems => {
+      return [...prevToDoItems, toDoItem]
+    })
+  }
+
+  function deleteItem(id) {
+    setToDoItems(prevToDoItems => {
+      return prevToDoItems.filter((toDoItems, index) => {
+        return index !== id;
+      })
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='Todo-list'>
+        Add your todo task
+        <ToDoForm addItem={addItem} />
+        {toDoItems.map((toDoItem, index) => (
+          <ToDoItem 
+            deleteItem={deleteItem}
+            index={index}
+            item={toDoItem}
+            key={index} />
+        ))
+      }
+      </div>
     </div>
   );
 }
